@@ -1,4 +1,4 @@
-import 'package:core/packages/flutter_bloc/flutter_bloc.dart';
+import 'package:core/core.dart';
 import '../../packages/equatable/equatable.dart';
 part 'base_state.dart';
 

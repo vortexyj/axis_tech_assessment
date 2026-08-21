@@ -15,23 +15,17 @@ enum PageState {
 
 class BaseState extends Equatable {
   final PageState pageState;
-  // final Failure? failure;
+  final Failure? failure;
 
-  const BaseState({
-    this.pageState = PageState.idle,
-    // this.failure,
-  });
+  const BaseState({this.pageState = PageState.idle, this.failure});
 
-  BaseState copyWith({
-    PageState? pageState,
-    // Failure? failure,
-  }) {
+  BaseState copyWith({PageState? pageState, Failure? failure}) {
     return BaseState(
       pageState: pageState ?? this.pageState,
-      // failure: failure ?? this.failure,
+      failure: failure ?? this.failure,
     );
   }
 
   @override
-  List<Object?> get props => [pageState /*, failure*/];
+  List<Object?> get props => [pageState, failure];
 }
