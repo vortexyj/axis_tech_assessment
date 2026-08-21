@@ -1,4 +1,4 @@
-name: splash
+name: exchange
 description: "A new Flutter package project."
 version: 0.0.1
 homepage:
@@ -13,11 +13,11 @@ dependencies:
 
   ### MODULES
   core:
-    path: ../core
+    path: ../../core
   failures:
-    path: ../failures
+    path: ../../failures
   local_storage:
-    path: ../local_storage
+    path: ../../local_storage
 
 dev_dependencies:
   flutter_test:
