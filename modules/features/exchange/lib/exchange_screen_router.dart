@@ -9,10 +9,10 @@ class ExchangeScreenRouter {
   static Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case ExchangeScreenView.id:
-      return CustomPageRouter.createRoute(page:ExchangeScreenView());
+        return CustomPageRouter.createRoute(page: ExchangeScreenView());
       // [Adding_new_router_case_here_dont_remove_this_command_!!!]
       default:
-        return null; 
+        return null;
     }
   }
 }

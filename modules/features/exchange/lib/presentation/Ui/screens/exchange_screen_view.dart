@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:currency_details/presentation/Ui/screens/currency_details_screen_view.dart';
 import 'package:exchange/domain/entities/exchange_rate/exchange_rate_item.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/ui_components.dart';
@@ -115,7 +116,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
 
   Widget _buildSkeletonList() {
     return Column(
-      children: List.generate(10, (index) {
+      children: List.generate(5, (index) {
         return AppCard(
           title: null,
           isLoading: true,
@@ -141,41 +142,56 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: rates.length,
         itemBuilder: (context, index) {
-          return _buildRateRow(rates[index], isLast: index == rates.length - 1);
+          return _buildRateRow(
+            context,
+            rates[index],
+            isLast: index == rates.length - 1,
+          );
         },
       ),
     );
   }
 
-  Widget _buildRateRow(ExchangeRateItem item, {required bool isLast}) {
+  Widget _buildRateRow(
+    BuildContext context,
+    ExchangeRateItem item, {
+    required bool isLast,
+  }) {
     final code = item.currency.name;
-    return AppCard(
-      title: item.currency.displayName,
-      titleColor: AppColors.textColor,
-      subTitle: code,
-      subTitleColor: AppColors.hintGrey,
-      hasStartWidget: true,
-      hasEndWidget: true,
-      hasShadow: false,
-      hasBorder: false,
-      bottomBorder: !isLast,
-      margin: EdgeInsets.zero,
-      padding: EdgeInsets.symmetric(
-        vertical: AppValues.padding_13,
-        horizontal: AppPadding.p6,
+    return InkWell(
+      onTap: () => Navigator.pushNamed(
+        context,
+        CurrencyDetailsScreenView.id,
+        arguments: item.currency,
       ),
-      startWidget: _CurrencyBadge(code: code),
-      endWidget: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('${item.rate.toStringAsFixed(3)} EGP', style: TextStyles.bold),
-          SizedBox(height: 3.h),
-          RateChangeText(
-            absoluteChange: item.absoluteChange,
-            percentChange: item.percentChange,
-          ),
-        ],
+      child: AppCard(
+        title: item.currency.displayName,
+        titleColor: AppColors.textColor,
+        subTitle: code,
+        subTitleColor: AppColors.hintGrey,
+        hasStartWidget: true,
+        hasEndWidget: true,
+        hasShadow: false,
+        hasBorder: false,
+        bottomBorder: !isLast,
+        margin: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(
+          vertical: AppValues.padding_13,
+          horizontal: AppPadding.p6,
+        ),
+        startWidget: _CurrencyBadge(code: code),
+        endWidget: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('${item.rate.toStringAsFixed(3)} EGP', style: TextStyles.bold),
+            SizedBox(height: 3.h),
+            RateChangeText(
+              absoluteChange: item.absoluteChange,
+              percentChange: item.percentChange,
+            ),
+          ],
+        ),
       ),
     );
   }

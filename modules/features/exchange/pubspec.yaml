@@ -18,12 +18,16 @@ dependencies:
     path: ../../failures
   local_storage:
     path: ../../local_storage
+  currency_details:
+    path: ../currency_details
   ui_components:
     path: ../../ui_components
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  bloc_test: ^9.1.7
+  mocktail: ^1.0.4
   flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the

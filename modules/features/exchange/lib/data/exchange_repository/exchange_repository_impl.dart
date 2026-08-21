@@ -17,19 +17,16 @@ class ExchangeRepositoryImpl implements ExchangeRepository {
   });
 
   @override
-  Future<Either<Failure, GetCurrencyEntity>> getCurrency(
-      {required GetCurrencyRequestModel requestModel}) async {
+  Future<Either<Failure, GetCurrencyEntity>> getCurrency({
+    required GetCurrencyRequestModel requestModel,
+  }) async {
     try {
       final response = await remoteDataSource.getCurrency(requestModel);
       final result = DAppRight.handle(response);
-      return result.fold(
-        (failure) => Left(failure),
-        (entity) {
-          // Fire-and-forget — caching shouldn't hold up returning fresh data.
-          localDataSource.cacheCurrency(requestModel, entity);
-          return Right(entity);
-        },
-      );
+      return result.fold((failure) => Left(failure), (entity) {
+        localDataSource.cacheCurrency(requestModel, entity);
+        return Right(entity);
+      });
     } on Exception catch (error) {
       final failure = FailureHandler(error).getExceptionFailure();
       if (failure is ConnectionFailure) {
@@ -39,5 +36,6 @@ class ExchangeRepositoryImpl implements ExchangeRepository {
       return Left(failure);
     }
   }
+
   // [Adding_new_repo_impl_method_here_dont_remove_this_command_!!!]
 }

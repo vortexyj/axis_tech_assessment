@@ -20,6 +20,8 @@ dependencies:
     path: ../../local_storage
   exchange:
     path: ../exchange
+  currency_details:
+    path: ../currency_details
 
 dev_dependencies:
   flutter_test:

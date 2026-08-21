@@ -24,7 +24,10 @@ class ExchangeDI {
         () => ExchangeLocalDataSourceImpl(localStorage: di()),
       )
       ..registerFactory<ExchangeRepository>(
-        () => ExchangeRepositoryImpl(remoteDataSource: di(), localDataSource: di()),
+        () => ExchangeRepositoryImpl(
+          remoteDataSource: di(),
+          localDataSource: di(),
+        ),
       )
       ..registerFactory(() => ExchangeCubit(di()))
       ..registerFactory(() => GetCurrencyUseCase(repository: di()))

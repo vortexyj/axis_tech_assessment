@@ -18,6 +18,8 @@ dependencies:
     path: modules/features/splash
   exchange:
     path: modules/features/exchange
+  currency_details:
+    path: modules/features/currency_details
 
   cupertino_icons: ^1.0.8
 

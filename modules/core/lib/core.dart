@@ -35,6 +35,7 @@ export 'packages/flutter_bloc/flutter_bloc.dart';
 export 'packages/path_provider/path_provider.dart';
 export 'packages/shimmer/shimmer.dart';
 export 'packages/intl/intl.dart';
+export 'packages/fl_chart/fl_chart.dart';
 export 'core_di/core_di.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';

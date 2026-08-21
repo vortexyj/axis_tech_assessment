@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
-import 'package:exchange/presentation/Ui/screens/exchange_screen_view.dart';
+import 'package:currency_details/currency_details_screen_router.dart';
+import 'package:exchange/exchange_screen_router.dart';
 import 'package:flutter/material.dart';
 import '../../cubits/splash/splash_cubit.dart';
 
@@ -8,7 +9,7 @@ class SplashScreenView extends BaseView<SplashCubit, SplashState> {
   SplashScreenView({super.key});
   @override
   void onSuccess(BuildContext context, SplashState state) {
-    Navigator.pushNamed(context, ExchangeScreenView.id);
+    Navigator.pushNamed(context, ExchangeScreens.exchangeScreen);
   }
 
   @override
