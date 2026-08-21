@@ -2,10 +2,10 @@
 export 'falvors/flavors.dart';
 
 /// Application modules
-// export 'package:network/network.dart';
+export 'package:network/network.dart';
 // export 'usecase/usecase.dart';
 // export 'package:local_storage/local_storage.dart';
-// export 'package:failures/failures.dart';
+export 'package:failures/failures.dart';
 export 'base/bloc/base_bloc.dart';
 export 'package:core/base/ui/base_view.dart';
 export 'utils/values/app_values.dart';
@@ -20,6 +20,7 @@ export 'utils/values/dimensions.dart';
 /// App Utilities export
 export 'utils/animation/animations.dart';
 export 'utils/animation/debouncer.dart';
+export 'holders/app_data_holder.dart';
 
 /// App Routes
 export 'app_routes/custom_page_router.dart';

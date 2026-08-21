@@ -4,4 +4,5 @@ final di = GetIt.instance;
 
 Future<void> initDependencyInjection() async {
   CoreDI();
+  NetworkDI();
 }
