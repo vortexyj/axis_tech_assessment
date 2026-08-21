@@ -90,7 +90,7 @@ packages:
     source: hosted
     version: "1.19.1"
   core:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: "modules/core"
       relative: true
