@@ -1,7 +1,4 @@
-import 'package:core/base/bloc/base_bloc.dart';
-import 'package:core/packages/flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:ui_components/ui_components.dart';
 
 import '../../core.dart';

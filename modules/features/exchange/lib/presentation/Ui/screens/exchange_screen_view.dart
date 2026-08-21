@@ -115,7 +115,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
 
   Widget _buildSkeletonList() {
     return Column(
-      children: List.generate(10, (index) {
+      children: List.generate(5, (index) {
         return AppCard(
           title: null,
           isLoading: true,
