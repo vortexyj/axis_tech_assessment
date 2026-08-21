@@ -260,3 +260,70 @@ reconstructing them from memory, and added them in one pass.
 **Decision:** Accepted.
 **Why:** Same reasoning as entry 4 — an audit-able log has to be built from
 actual transcript/commit evidence, not recollection.
+
+---
+
+## 10. Module 2 API calls + verified response examples
+
+**Date:** 2026-08-21, ~14:2x local (+03:00)
+**Session:** Claude Code
+**Files changed:** None — read-only `curl`, no files written.
+
+**Prompt (verbatim):**
+> give me the second module needed apis and thier response json example
+
+**What the model returned:**
+Ran `curl` against the live API for `latest` plus the 6 preceding calendar
+dates (2026-08-15 through 2026-08-20) to get real, verified 7-day data rather
+than fabricating a smooth-looking series. Explained the detail screen needs 7
+calls total (same endpoint shape as Module 1), that days 0/-1 can be reused
+from the list screen's already-fetched data instead of re-fetched, and walked
+through deriving current rate / daily change / last-updated / chart series
+from the real numbers returned. Flagged a spec requirement (user-friendly
+message if any historical date fails/404s) as worth handling as a partial
+series rather than a hard failure.
+
+**Decision:** Accepted.
+**Why:** Consistent with entry 7 — verified against the live API rather than
+assumed.
+
+---
+
+## 11. Self-contained UI/UX design brief for Claude Design
+
+**Date:** 2026-08-21, ~14:3x local (+03:00)
+**Session:** Claude Code
+**Files changed:** None in the app repo — wrote
+`claude_design_prompt.md` to the session scratchpad (outside the project
+tree) and delivered it to the user as a file, not committed to this repo.
+
+**Prompt (verbatim, across a brief clarifying exchange):**
+> give me a prompt md and whats needed to send it to claude code to give me
+> the application design done based on thet exact responses and dto
+>
+> [clarification, via AskUserQuestion] "i meant claude design i need a prompt
+> to send to claude design to create for me a UIUX screens for the
+> application see tell him the exact needed information, dont send a not
+> documented information in the assisment and tell him exactly to not add
+> anything not added or covered in the assissment or the responses" /
+> "brand new claude design session no memory"
+
+**What the model returned:**
+Since the destination was a fresh session with zero shared context, asked two
+clarifying questions first (what the output should be — Flutter code vs. a
+visual mockup brief — and whether it needed to be self-contained) rather than
+guessing, since those materially change what the deliverable should contain.
+On confirmation, wrote a self-contained brief covering: the 5 currencies
+exactly as named in the assessment PDF (no invented symbols/flags presented as
+required), the real verified API responses and derived DTO fields from
+entries 7 and 10 (not fabricated numbers), every required screen and state
+from Module 1 and Module 2 of the assessment, an explicit "out of scope" list,
+and a closing section distinguishing what the assessment leaves open
+(visual polish) from what's fixed (data fields, states, color-direction rule).
+
+**Decision:** Accepted and delivered as a file.
+**Why:** The user was explicit that the brief must not include anything
+undocumented in the assessment or unverified in the API responses — the model
+built it entirely from already-verified facts (PDF text, entries 7/10's real
+API data) rather than adding plausible-sounding extras, and asked before
+assuming scope on the two genuinely ambiguous points.
