@@ -32,6 +32,8 @@ dependencies:
     path: ../failures
   network:
     path: ../network
+  local_storage:
+    path: ../local_storage
 
 dev_dependencies:
   flutter_test:

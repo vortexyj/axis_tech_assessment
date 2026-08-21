@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:core/core.dart';
 import 'error_handler.dart';
 import 'interceptors.dart';
 import 'ssl_config.dart';
 
 class NetworkUtilImpl implements Network {
-  // final LocalStorage localStorage;
+  final LocalStorage localStorage;
   final Dio _dio = Dio();
   final DioErrorHandler _errorHandler = DioErrorHandler();
 
-  NetworkUtilImpl() {
+  NetworkUtilImpl({required this.localStorage}) {
     _dio.interceptors.addAll(NetworkInterceptors.create(
       dio: _dio,
       refreshToken: _refreshToken,
@@ -62,14 +62,14 @@ class NetworkUtilImpl implements Network {
         final token = response.data["result"]["accessToken"];
         final newRefresh = response.data["result"]["refreshToken"];
         BaseRequestDefaults.instance.setToken(token, refreshToken: newRefresh);
-        // await localStorage.setValue(
-        //     value: StringType(newRefresh),
-        //     key: StorageKeys.refreshToken,
-        //     isSecureStorage: true);
-        // await localStorage.setValue(
-        //     value: StringType(token),
-        //     key: StorageKeys.token,
-        //     isSecureStorage: true);
+        await localStorage.setValue(
+            value: StringType(newRefresh),
+            key: StorageKeys.refreshToken,
+            isSecureStorage: true);
+        await localStorage.setValue(
+            value: StringType(token),
+            key: StorageKeys.token,
+            isSecureStorage: true);
         return true;
       }
       return false;

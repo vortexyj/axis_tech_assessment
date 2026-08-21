@@ -10,6 +10,7 @@ class NetworkDI {
   final di = GetIt.instance;
 
   void call() {
-    di.registerLazySingleton<Network>(() => NetworkUtilImpl());
+    di.registerLazySingleton<Network>(
+        () => NetworkUtilImpl(localStorage: di()));
   }
 }
