@@ -57,35 +57,44 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin ?? EdgeInsetsDirectional.symmetric(vertical: 10.spMin),
-      decoration: BoxDecoration(
-        boxShadow: hasShadow
-            ? [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: shadowOpacity ?? 0.3),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                  offset: const Offset(1, 1),
-                ),
-              ]
-            : null,
-        borderRadius: BorderRadius.circular(radius ?? 15.0.sp),
-        border: bottomBorder
-            ? Border(
-                bottom:
-                    BorderSide(color: borderColor ?? AppColors.dividerColor),
-              )
-            : hasBorder
-                ? Border.all(color: borderColor ?? Colors.white)
-                : null,
-        color: backgroundColor ?? Colors.white,
-      ),
-      child: Padding(
-        padding: padding ?? EdgeInsets.zero,
-        child: isLoading ? _buildSkeleton(context) : _buildContent(context),
-      ),
-    );
+    return TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOut,
+        builder: (context, value, child) {
+          return Container(
+            margin:
+                margin ?? EdgeInsetsDirectional.symmetric(vertical: 10.spMin),
+            decoration: BoxDecoration(
+              boxShadow: hasShadow
+                  ? [
+                      BoxShadow(
+                        color:
+                            Colors.grey.withValues(alpha: shadowOpacity ?? 0.3),
+                        spreadRadius: 1,
+                        blurRadius: 10,
+                        offset: const Offset(1, 1),
+                      ),
+                    ]
+                  : null,
+              borderRadius: BorderRadius.circular(radius ?? 15.0.sp),
+              border: bottomBorder
+                  ? Border(
+                      bottom: BorderSide(
+                          color: borderColor ?? AppColors.dividerColor),
+                    )
+                  : hasBorder
+                      ? Border.all(color: borderColor ?? Colors.white)
+                      : null,
+              color: backgroundColor ?? Colors.white,
+            ),
+            child: Padding(
+              padding: padding ?? EdgeInsets.zero,
+              child:
+                  isLoading ? _buildSkeleton(context) : _buildContent(context),
+            ),
+          );
+        });
   }
 
   Widget _buildContent(BuildContext context) {
@@ -111,7 +120,7 @@ class AppCard extends StatelessWidget {
                       decorationColor:
                           titleColor ?? Theme.of(context).colorScheme.primary,
                       fontSize: titleFontSize ?? 15.sp,
-                      fontWeight: FontWeight.w600)),
+                      fontWeight: FontWeight.bold)),
               hasSubtitle
                   ? Text(
                       subTitle ?? "",

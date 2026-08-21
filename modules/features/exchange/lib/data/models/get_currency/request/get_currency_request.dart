@@ -12,6 +12,5 @@ class GetCurrencyRequest with Request, GetRequest {
       : AppFlavor.instance.baseUrl;
 
   @override
-  String get path =>
-      '/${requestModel.currencyEnums?.responseKey ?? 'egp'}.json';
+  String get path => '${requestModel.currencyEnums?.responseKey ?? 'egp'}.json';
 }

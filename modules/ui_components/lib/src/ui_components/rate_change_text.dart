@@ -6,37 +6,48 @@ import '../text_styles.dart';
 class RateChangeText extends StatelessWidget {
   const RateChangeText({
     super.key,
-    required this.change,
-    required this.label,
+    required this.absoluteChange,
+    required this.percentChange,
     this.style,
     this.glyphSize = 8,
   });
 
-  final num change;
-  final String label;
+  final num absoluteChange;
+  final num percentChange;
   final TextStyle? style;
   final double glyphSize;
 
   @override
   Widget build(BuildContext context) {
-    final color = change.directionColor;
+    final color = absoluteChange.directionColor;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         CustomPaint(
           size: Size.square(glyphSize),
           painter: _DirectionGlyphPainter(
-            direction: change.direction,
+            direction: absoluteChange.direction,
             color: color,
           ),
         ),
         SizedBox(width: 4.w),
         Text(
-          label,
+          _label,
           style: (style ?? TextStyles.changeText).copyWith(color: color),
         ),
       ],
     );
+  }
+
+  String get _label {
+    final sign = absoluteChange > 0
+        ? '+'
+        : absoluteChange < 0
+            ? '-'
+            : '~';
+    final abs = absoluteChange.abs().toStringAsFixed(3);
+    final pct = percentChange.abs().toStringAsFixed(2);
+    return '$sign$abs · $sign$pct%';
   }
 }
 

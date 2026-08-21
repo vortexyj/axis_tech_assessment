@@ -25,6 +25,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context),
+            _buildOfflineBanner(context),
             SizedBox(height: AppValues.padding_8),
             Expanded(child: _buildRatesList(context)),
           ],
@@ -33,8 +34,6 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
     );
   }
 
-  /// Title + "Base EGP · Updated ..." subtitle. Only rebuilds on pageState
-  /// or lastUpdated changes — the rate list rebuilding doesn't touch this.
   Widget _buildHeader(BuildContext context) {
     return BlocBuilder<ExchangeCubit, ExchangeState>(
       buildWhen: (previous, current) =>
@@ -45,7 +44,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Exchange Rates', style: TextStyles.headline),
+            Text('Exchange Rates', style: TextStyles.displayValue),
             SizedBox(height: 5.h),
             if (isLoading)
               Shimmer.fromColors(
@@ -75,8 +74,23 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
     return 'Base EGP · Updated $formatted';
   }
 
-  /// Loading / error / empty / loaded — only rebuilds on pageState or rates
-  /// changes, independent of the header section above.
+  /// Only rebuilds on isOffline/cachedAt changes — independent of the
+  /// header and rate list sections.
+  Widget _buildOfflineBanner(BuildContext context) {
+    return BlocBuilder<ExchangeCubit, ExchangeState>(
+      buildWhen: (previous, current) =>
+          previous.isOffline != current.isOffline ||
+          previous.cachedAt != current.cachedAt,
+      builder: (context, state) {
+        if (!state.isOffline) return const SizedBox.shrink();
+        return Padding(
+          padding: EdgeInsets.only(top: AppValues.padding_8),
+          child: OfflineBanner(cachedAt: state.cachedAt),
+        );
+      },
+    );
+  }
+
   Widget _buildRatesList(BuildContext context) {
     return BlocBuilder<ExchangeCubit, ExchangeState>(
       buildWhen: (previous, current) =>
@@ -101,7 +115,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
 
   Widget _buildSkeletonList() {
     return Column(
-      children: List.generate(5, (index) {
+      children: List.generate(10, (index) {
         return AppCard(
           title: null,
           isLoading: true,
@@ -122,7 +136,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
 
   Widget _buildLoadedList(BuildContext context, List<ExchangeRateItem> rates) {
     return RefreshIndicator(
-      onRefresh: () => context.read<ExchangeCubit>().getExchangeRates(),
+      onRefresh: () => context.read<ExchangeCubit>().initState(),
       child: ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: rates.length,
@@ -137,7 +151,9 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
     final code = item.currency.name;
     return AppCard(
       title: item.currency.displayName,
+      titleColor: AppColors.textColor,
       subTitle: code,
+      subTitleColor: AppColors.hintGrey,
       hasStartWidget: true,
       hasEndWidget: true,
       hasShadow: false,
@@ -153,23 +169,15 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('${item.rate.toStringAsFixed(3)} EGP', style: TextStyles.rowValue),
+          Text('${item.rate.toStringAsFixed(3)} EGP', style: TextStyles.bold),
           SizedBox(height: 3.h),
-          RateChangeText(change: item.absoluteChange, label: _changeLabel(item)),
+          RateChangeText(
+            absoluteChange: item.absoluteChange,
+            percentChange: item.percentChange,
+          ),
         ],
       ),
     );
-  }
-
-  String _changeLabel(ExchangeRateItem item) {
-    final sign = item.absoluteChange > 0
-        ? '+'
-        : item.absoluteChange < 0
-            ? '-'
-            : '~';
-    final abs = item.absoluteChange.abs().toStringAsFixed(3);
-    final pct = item.percentChange.abs().toStringAsFixed(2);
-    return '$sign$abs · $sign$pct%';
   }
 
   Widget _buildErrorState(BuildContext context) {
@@ -178,7 +186,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
       title: "Couldn't load rates",
       subTitle: 'Check your internet connection and try again.',
       buttonTitle: 'Retry',
-      onClickFunction: (_) => context.read<ExchangeCubit>().getExchangeRates(),
+      onClickFunction: (_) => context.read<ExchangeCubit>().initState(),
     );
   }
 
@@ -190,7 +198,7 @@ class ExchangeScreenView extends BaseView<ExchangeCubit, ExchangeState> {
       buttonTitle: 'Refresh',
       buttonBackgroundColor: AppColors.lightMainColor,
       buttonTextColor: AppColors.textColor,
-      onClickFunction: (_) => context.read<ExchangeCubit>().getExchangeRates(),
+      onClickFunction: (_) => context.read<ExchangeCubit>().initState(),
     );
   }
 }
@@ -202,16 +210,19 @@ class _CurrencyBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 38,
-      height: 38,
+      width: 38.w,
+      height: 38.h,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: AppColors.lightGrey,
-        borderRadius: BorderRadius.circular(11),
+        borderRadius: BorderRadius.circular(11.r),
       ),
       child: Text(
         code.substring(0, 2),
-        style: TextStyles.bold.copyWith(fontSize: 12, color: AppColors.textColor),
+        style: TextStyles.bold.copyWith(
+          fontSize: 16.sp,
+          color: AppColors.textColor,
+        ),
       ),
     );
   }

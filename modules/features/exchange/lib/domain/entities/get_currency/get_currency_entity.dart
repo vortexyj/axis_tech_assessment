@@ -5,14 +5,16 @@ class GetCurrencyEntity extends Equatable {
   final String? date;
   final EgpEntity? egp;
 
+  final bool isFromCache;
+  final DateTime? cachedAt;
+
   const GetCurrencyEntity({
     this.date,
     this.egp,
+    this.isFromCache = false,
+    this.cachedAt,
   });
 
   @override
-  List<Object?> get props => [
-        date,
-        egp,
-      ];
+  List<Object?> get props => [date, egp, isFromCache, cachedAt];
 }
