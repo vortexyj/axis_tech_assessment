@@ -7,20 +7,16 @@ class EgpEntity extends Equatable {
   final num? sar;
   final num? jpy;
 
-  const EgpEntity({
-    this.usd,
-    this.eur,
-    this.gbp,
-    this.sar,
-    this.jpy,
-  });
+  const EgpEntity({this.usd, this.eur, this.gbp, this.sar, this.jpy});
+
+  Map<String, num?> get asMap => {
+    'usd': usd,
+    'eur': eur,
+    'gbp': gbp,
+    'sar': sar,
+    'jpy': jpy,
+  };
 
   @override
-  List<Object?> get props => [
-        usd,
-        eur,
-        gbp,
-        sar,
-        jpy,
-      ];
+  List<Object?> get props => [usd, eur, gbp, sar, jpy];
 }

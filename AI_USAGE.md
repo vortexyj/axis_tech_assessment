@@ -260,3 +260,152 @@ reconstructing them from memory, and added them in one pass.
 **Decision:** Accepted.
 **Why:** Same reasoning as entry 4 — an audit-able log has to be built from
 actual transcript/commit evidence, not recollection.
+
+---
+
+## 10. Module 2 API calls + verified response examples
+
+**Date:** 2026-08-21, ~14:2x local (+03:00)
+**Session:** Claude Code
+**Files changed:** None — read-only `curl`, no files written.
+
+**Prompt (verbatim):**
+> give me the second module needed apis and thier response json example
+
+**What the model returned:**
+Ran `curl` against the live API for `latest` plus the 6 preceding calendar
+dates (2026-08-15 through 2026-08-20) to get real, verified 7-day data rather
+than fabricating a smooth-looking series. Explained the detail screen needs 7
+calls total (same endpoint shape as Module 1), that days 0/-1 can be reused
+from the list screen's already-fetched data instead of re-fetched, and walked
+through deriving current rate / daily change / last-updated / chart series
+from the real numbers returned. Flagged a spec requirement (user-friendly
+message if any historical date fails/404s) as worth handling as a partial
+series rather than a hard failure.
+
+**Decision:** Accepted.
+**Why:** Consistent with entry 7 — verified against the live API rather than
+assumed.
+
+---
+
+## 11. Self-contained UI/UX design brief for Claude Design
+
+**Date:** 2026-08-21, ~14:3x local (+03:00)
+**Session:** Claude Code
+**Files changed:** None in the app repo — wrote
+`claude_design_prompt.md` to the session scratchpad (outside the project
+tree) and delivered it to the user as a file, not committed to this repo.
+
+**Prompt (verbatim, across a brief clarifying exchange):**
+> give me a prompt md and whats needed to send it to claude code to give me
+> the application design done based on thet exact responses and dto
+>
+> [clarification, via AskUserQuestion] "i meant claude design i need a prompt
+> to send to claude design to create for me a UIUX screens for the
+> application see tell him the exact needed information, dont send a not
+> documented information in the assisment and tell him exactly to not add
+> anything not added or covered in the assissment or the responses" /
+> "brand new claude design session no memory"
+
+**What the model returned:**
+Since the destination was a fresh session with zero shared context, asked two
+clarifying questions first (what the output should be — Flutter code vs. a
+visual mockup brief — and whether it needed to be self-contained) rather than
+guessing, since those materially change what the deliverable should contain.
+On confirmation, wrote a self-contained brief covering: the 5 currencies
+exactly as named in the assessment PDF (no invented symbols/flags presented as
+required), the real verified API responses and derived DTO fields from
+entries 7 and 10 (not fabricated numbers), every required screen and state
+from Module 1 and Module 2 of the assessment, an explicit "out of scope" list,
+and a closing section distinguishing what the assessment leaves open
+(visual polish) from what's fixed (data fields, states, color-direction rule).
+
+**Decision:** Accepted and delivered as a file.
+**Why:** The user was explicit that the brief must not include anything
+undocumented in the assessment or unverified in the API responses — the model
+built it entirely from already-verified facts (PDF text, entries 7/10's real
+API data) rather than adding plausible-sounding extras, and asked before
+assuming scope on the two genuinely ambiguous points.
+
+---
+
+## 12. Update `ui_components` design tokens + existing widgets from the Claude Design handoff
+
+**Date:** 2026-08-21, ~16:02 local (+03:00)
+**Session:** Claude Code
+**Files changed:** [modules/ui_components/lib/src/app_colors.dart](modules/ui_components/lib/src/app_colors.dart),
+[app_theme.dart](modules/ui_components/lib/src/app_theme.dart),
+[text_styles.dart](modules/ui_components/lib/src/text_styles.dart),
+[app_button_view.dart](modules/ui_components/lib/src/ui_components/app_button_view.dart),
+[app_card.dart](modules/ui_components/lib/src/ui_components/app_card.dart),
+[app_bottom_sheet_view.dart](modules/ui_components/lib/src/ui_components/app_bottom_sheet_view.dart),
+[error_widget_view.dart](modules/ui_components/lib/src/ui_components/error_widget_view.dart),
+[base_view_widgets.dart](modules/ui_components/lib/src/ui_components/base_view_widgets.dart),
+new `rate_change_text.dart`, [ui_components.dart](modules/ui_components/lib/ui_components.dart) barrel,
+[modules/core/lib/core.dart](modules/core/lib/core.dart), new
+`core/lib/packages/shimmer/shimmer.dart`, new
+`core/lib/utils/extensions/rate_direction_extension.dart`.
+
+**Prompt (verbatim):**
+> in the @docs/currency-exchange-tracker/ there is the result for the
+> application claude design result first go to the @modules/ui_components/
+> module and update the applicaiton color, theme, text styles to begin design
+> with thhem then go to the @modules/ui_components/lib/src/ui_component checl
+> for the allready added widget for the application add whats needed in the
+> design new to be used and make it take dynamic results for the first screen
+> the app card can fit the exxtchange widget, check if it is doable to do it
+> with it leave it, create it is shimmer loading style in the widget and make
+> a bool isloading passed to the widget and inabling and disabling the
+> shimmer view by this bool edit the app button view to fit the design also
+> make the bottom sheet fit the design and error widget to be used in the
+> screens u can make the text of the currency exchange rate a seperated text
+> screen and make an extention to it in the @modules/core/lib/utils/extentions
+> by knowing it is going up or down change it tell me if u need any clarify
+> dont start design the screen just yet
+
+**What the model returned:**
+Read the full Claude Design handoff (`Currency Exchange Tracker.dc.html` +
+`claude_design_prompt.md`) top to bottom before touching code, then audited
+every existing file in `ui_components` and ran `dart analyze`, which surfaced
+that `app_button_view.dart` was **already broken** — a dead import to a
+`dsquares_mobile_design_system` package that isn't a dependency and doesn't
+exist in this repo (leftover boilerplate, unrelated to this project). Grepped
+the whole repo for usages of `AppButtonView`/`AppCard`/`BottomSheetView`/
+`AppColors.*` and found zero consumers anywhere, so every change below carries
+no blast radius. Then:
+- Replaced `AppColors`' blue-brand palette with the design's near-black/neutral
+  system (kept existing field names, repointed values; added new tokens for
+  screen background, borders, shimmer, and a green `successColor` the mock
+  data never actually exercises but the brief's color rule requires).
+- Updated `AppTheme` (scaffold/card/app-bar colors) and added new semantic
+  `TextStyles` entries alongside the existing ones.
+- Rewrote `AppButtonView` from scratch on plain Flutter widgets (pill shape,
+  primary/secondary variants) since the old implementation couldn't compile.
+- Extended `AppCard` in place with `isLoading` (shimmer skeleton via a new
+  `core` shimmer wrapper, matching the existing third-party-package pattern)
+  and opt-in flat/bottom-border chrome — judged it *was* doable to reuse
+  rather than fork, since defaults preserve the original look exactly.
+- Rebuilt `BottomSheetView` and `ErrorWidgetView`, both of which were
+  largely commented-out/non-functional, into working components styled to
+  the new palette (there's no bottom-sheet screen in the actual design mock,
+  so this is a reskin/completion of the existing generic component, not new
+  content).
+- Added `RateChangeText` (new widget) + `RateChangeX`/`RateDirection` (new
+  extension on `num` in `core/lib/utils/extensions`, exported through
+  `core.dart`) implementing the brief's exact rule: rate up -> red (EGP
+  weaker), down -> green (stronger), flat -> gray.
+- Ran `dart analyze` + `dart fix --apply` + `dart format` across `core`,
+  `ui_components`, `network`, `failures`, the `exchange` feature module, and
+  the root app to confirm nothing broke.
+
+**Decision:** Accepted, with judgment calls flagged back to the user rather
+than blocking on them (zero existing consumers made all of this low-risk and
+reversible): full palette replacement, extending `AppCard` in place instead of
+forking a new widget, and reskinning (not inventing new content for) the
+bottom sheet.
+**Why:** The user explicitly invited "tell me if u need any clarify," but
+every ambiguity here was reversible and scoped to an unused module — asking
+would have cost a round trip for decisions the user can just as easily correct
+after seeing the result. Did not start on screens, per the explicit
+instruction.

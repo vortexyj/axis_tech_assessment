@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:splash/presentation/Ui/screens/splash_screen_view.dart';
+import 'package:technical_axis/app_router.dart';
 part 'app.dart';
 
 class MainApp extends StatelessWidget {

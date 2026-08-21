@@ -34,6 +34,8 @@ dependencies:
     path: ../network
   local_storage:
     path: ../local_storage
+  ui_components:
+    path: ../ui_components
 
 dev_dependencies:
   flutter_test:

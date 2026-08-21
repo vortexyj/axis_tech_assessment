@@ -22,4 +22,6 @@ class StorageKeys {
 
   static String usingBiometrics = "usingBiometrics";
 
+  static String exchangeRatesCache = "exchangeRatesCache";
+  static String exchangeRatesCachedAt = "exchangeRatesCachedAt";
 }
