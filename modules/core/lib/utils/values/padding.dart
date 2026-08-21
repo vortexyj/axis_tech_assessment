@@ -1,0 +1,32 @@
+abstract class AppPadding {
+  static const double p0 = 0;
+  static const double p2 = 2;
+  static const double p3 = 3;
+  static const double p4 = 4;
+  static const double p5 = 5;
+  static const double p6 = 6;
+  static const double p8 = 8;
+  static const double p10 = 10;
+  static const double p12 = 12;
+  static const double p13 = 13;
+  static const double p14 = 14;
+  static const double p16 = 16;
+  static const double p20 = 20;
+  static const double p24 = 24;
+  static const double p28 = 28;
+  static const double p30 = 30;
+  static const double p32 = 32;
+  static const double p33 = 33;
+  static const double p36 = 36;
+  static const double p38 = 38;
+  static const double p40 = 40;
+  static const double p43 = 43;
+  static const double p45 = 45;
+  static const double p50 = 50;
+  static const double p70 = 70;
+  static const double p100 = 100;
+  static const double half = 8;
+  static const double small = 10;
+  static const double large = 24;
+  static const double extraLarge = 32;
+}
