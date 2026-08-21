@@ -8,9 +8,8 @@ class BaseViewWidgets {
 
   Future<dynamic> showErrorDialog(
     BuildContext context, {
-    String? image,
+    IconData? icon,
     String? title,
-    String? statusCode,
     String? subTitle,
     String? buttonTitle,
     bool? isDismissible,
@@ -25,7 +24,7 @@ class BaseViewWidgets {
           child: SafeArea(
             bottom: true,
             child: ErrorWidgetView(
-              image: image ?? '',
+              icon: icon ?? Icons.error_outline,
               title: title ?? 'something_went_wrong'.tr(),
               subTitle: subTitle ?? 'oops'.tr(),
               buttonTitle: buttonTitle ?? 'retry'.tr(),
@@ -43,7 +42,7 @@ class BaseViewWidgets {
   showBottomSheetDialog(
     BuildContext context, {
     bool? isDismissible,
-    String? iconPath,
+    Widget? iconWidget,
     DialogType? dialogType,
     String? title,
     String? mainButtonText,
@@ -61,18 +60,17 @@ class BaseViewWidgets {
       builder: (bottomSheetContext) {
         return BottomSheetView(
           isDismissible: isDismissible ?? true,
-          iconPath: iconPath ?? '',
-
-          /// add image
+          iconWidget: iconWidget,
           dialogType: dialogType ?? DialogType.errorDialog,
           title: title ?? 'Are you sure?',
           mainButtonText: mainButtonText ?? 'cancel'.tr(),
-          mainButtonTextColor: mainButtonTextColor ?? AppColors.backgroundColor,
+          mainButtonTextColor: mainButtonTextColor ?? Colors.white,
           mainButtonColor: mainButtonColor ?? AppColors.mainColor,
           secondButtonText: secondButtonText ?? 'OK'.tr(),
           secondaryButtonTextColor:
-              secondaryButtonTextColor ?? AppColors.cardColors,
-          secondaryButtonColor: secondaryButtonColor ?? AppColors.errorColor,
+              secondaryButtonTextColor ?? AppColors.textColor,
+          secondaryButtonColor:
+              secondaryButtonColor ?? AppColors.lightMainColor,
           onSecondaryActionFunction: onSecondaryActionFunction ?? (ctx) {},
           onMainActionFunction: onMainActionFunction ?? (ctx) {},
         );

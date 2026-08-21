@@ -1,11 +1,12 @@
 enum CurrencyEnums {
-  EGP(responseKey: "egp"),
-  USD(responseKey: "usd"),
-  EUR(responseKey: "eur"),
-  GBP(responseKey: "gbp"),
-  SAR(responseKey: "sar"),
-  JPY(responseKey: "jpy");
+  EGP(responseKey: "egp", displayName: "Egyptian Pound"),
+  USD(responseKey: "usd", displayName: "US Dollar"),
+  EUR(responseKey: "eur", displayName: "Euro"),
+  GBP(responseKey: "gbp", displayName: "British Pound"),
+  SAR(responseKey: "sar", displayName: "Saudi Riyal"),
+  JPY(responseKey: "jpy", displayName: "Japanese Yen");
 
   final String responseKey;
-  const CurrencyEnums({required this.responseKey});
+  final String displayName;
+  const CurrencyEnums({required this.responseKey, required this.displayName});
 }

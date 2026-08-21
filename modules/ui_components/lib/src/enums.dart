@@ -15,7 +15,7 @@ extension DialogTypeExtension on DialogType {
         return AppColors.warningColor;
       case DialogType.errorDialog:
         return AppColors.mainColor;
-      }
+    }
   }
 
   Color get secondColor {
@@ -28,6 +28,6 @@ extension DialogTypeExtension on DialogType {
         return AppColors.backgroundColor;
       case DialogType.errorDialog:
         return AppColors.backgroundColor;
-      }
+    }
   }
 }

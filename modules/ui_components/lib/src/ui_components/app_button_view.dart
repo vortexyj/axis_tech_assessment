@@ -1,8 +1,11 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/app_colors.dart';
-import 'package:dsquares_mobile_design_system/dsquares_mobile_design_system.dart';
+import '../app_colors.dart';
+import '../text_styles.dart';
 
+/// A pill-shaped action button. Defaults to the primary (solid, dark) style;
+/// pass [backgroundColor] / [textColor] for the secondary (light) style.
 class AppButtonView extends StatelessWidget {
   const AppButtonView({
     super.key,
@@ -28,17 +31,41 @@ class AppButtonView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonWidget.withTitle(
-      height: height,
+    final Color resolvedBackground = isEnabled
+        ? (backgroundColor ?? AppColors.mainColor)
+        : AppColors.hintGrey.withValues(alpha: 0.3);
+    final Color resolvedTextColor =
+        isEnabled ? (textColor ?? Colors.white) : Colors.white;
+
+    return SizedBox(
       width: width,
-      textColor: textColor,
-      isEnabled: isEnabled,
-      title: title,
-      onClickFunction: onClickFunction,
-      onDisabledFunction: onDisabledFunction,
-      backgroundColor: AppColors.mainColor,
-      disabledBackgroundColor: AppColors.hintGrey.withValues(alpha: 0.3),
-      style: style,
+      height: height ?? 44.h,
+      child: Material(
+        color: resolvedBackground,
+        borderRadius: BorderRadius.circular(100),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(100),
+          onTap: () {
+            if (isEnabled) {
+              onClickFunction(context);
+            } else {
+              onDisabledFunction?.call();
+            }
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 26.w),
+            child: Center(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: (style ?? TextStyles.button).copyWith(
+                  color: resolvedTextColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

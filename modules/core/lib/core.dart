@@ -24,6 +24,7 @@ export 'utils/values/dimensions.dart';
 export 'utils/animation/animations.dart';
 export 'utils/animation/debouncer.dart';
 export 'utils/extensions/DateFormatting.dart';
+export 'utils/extensions/rate_direction_extension.dart';
 
 /// App Routes
 export 'app_routes/custom_page_router.dart';
@@ -32,6 +33,8 @@ export 'app_routes/custom_page_router.dart';
 export 'packages/cached_network_image/cached_network_image.dart';
 export 'packages/flutter_bloc/flutter_bloc.dart';
 export 'packages/path_provider/path_provider.dart';
+export 'packages/shimmer/shimmer.dart';
+export 'packages/intl/intl.dart';
 export 'core_di/core_di.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';

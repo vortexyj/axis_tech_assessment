@@ -3,19 +3,39 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   AppColors._();
-  static Color textColor = "#323232".toColor();
-  static Color subTextColor = "#767676".toColor();
-  static Color hintGrey = "#a1a1a1".toColor();
-  static Color lightGrey = "#F1F1F2".toColor();
-  static Color backgroundColor = "#ffffff".toColor();
-  static Color cardColors = "#F1F1F2".toColor();
-  static Color successColor = "#09c380".toColor();
-  static Color warningColor = "#e9ae27".toColor();
-  static Color errorColor = "#BC2C2C".toColor();
-  static Color errorLightColor = "#F8EAEA".toColor();
-  static Color mainColor = "#007bc0".toColor();
-  static Color lightMainColor = "#e6f2f9".toColor();
-  static Color darkMainColor = "#25314C".toColor();
+
+  /// Primary / brand — near-black ink used for primary actions & headlines.
+  static Color mainColor = "#0B0F19".toColor();
+  static Color lightMainColor = "#F1F2F4".toColor();
+  static Color darkMainColor = "#05070C".toColor();
+
+  /// Text
+  static Color textColor = "#0B0F19".toColor();
+  static Color subTextColor = "#8B8F98".toColor();
+  static Color mutedTextColor = "#6B7280".toColor();
+  static Color hintGrey = "#9AA0AC".toColor();
+
+  /// Surfaces
+  static Color backgroundColor = "#FFFFFF".toColor();
+  static Color screenBackgroundColor = "#F1F2F5".toColor();
+  static Color lightGrey = "#F1F2F4".toColor();
+  static Color cardColors = "#F1F2F4".toColor();
+  static Color borderColor = "#E4E5EA".toColor();
+  static Color dividerColor = "#F1F2F4".toColor();
+
+  /// Shimmer / skeleton loading
+  static Color shimmerBaseColor = "#ECEDF0".toColor();
+  static Color shimmerHighlightColor = "#E1E2E7".toColor();
+
+  /// Semantic status — rate direction, banners, feedback
+  static Color successColor = "#16A34A".toColor();
+  static Color errorColor = "#DC2626".toColor();
+  static Color errorLightColor = "#FBEAEA".toColor();
+  static Color neutralColor = "#9AA0AC".toColor();
+  static Color warningColor = "#92661A".toColor();
+  static Color warningBackgroundColor = "#FDF3E7".toColor();
+  static Color warningBorderColor = "#F5DFB8".toColor();
+
   static Color appBarColor = "#FFFFFF".toColor();
   static Color tabBarColor = "#FFFFFF".toColor();
 

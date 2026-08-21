@@ -27,6 +27,7 @@ class _AppState extends State<_App> {
         key: _key,
         title: AppFlavor.instance.title,
         debugShowCheckedModeBanner: false,
+        onGenerateRoute: AppRouter.onGenerateRoute,
         home: SplashScreenView(),
       ),
     );

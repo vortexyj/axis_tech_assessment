@@ -2,16 +2,18 @@ import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_components/src/enums.dart';
+import '../../ui_components.dart';
 
+/// A rounded-top modal sheet: optional icon, title, body copy / custom
+/// content, and one or two pill action buttons.
 class BottomSheetView extends StatelessWidget {
   final String? title, secondButtonText, mainButtonText, content;
   final Widget? contentWidget;
   final Widget? iconWidget;
   final Function(BuildContext)? onMainActionFunction, onSecondaryActionFunction;
-  final DialogType dialogType;
+  final DialogType? dialogType;
   final bool isCloseIcon;
   final bool isDismissible;
-  final String? iconPath;
   final Color? backgroundColor;
   final Color? titleColor;
   final Color? contentColor;
@@ -19,7 +21,6 @@ class BottomSheetView extends StatelessWidget {
   final Color? secondaryButtonColor;
   final Color? mainButtonTextColor;
   final Color? secondaryButtonTextColor;
-  final bool nobuttonWidth;
 
   const BottomSheetView({
     super.key,
@@ -30,9 +31,8 @@ class BottomSheetView extends StatelessWidget {
     this.isDismissible = true,
     this.secondButtonText,
     this.onMainActionFunction,
-    required this.dialogType,
+    this.dialogType,
     this.onSecondaryActionFunction,
-    this.iconPath,
     this.iconWidget,
     this.mainButtonText,
     this.mainButtonColor,
@@ -42,7 +42,6 @@ class BottomSheetView extends StatelessWidget {
     this.secondaryButtonTextColor,
     this.backgroundColor,
     this.contentColor,
-    this.nobuttonWidth = false,
   });
 
   static dynamic showBottomSheet({
@@ -54,6 +53,7 @@ class BottomSheetView extends StatelessWidget {
         isDismissible: isDismissible,
         isScrollControlled: true,
         enableDrag: isDismissible,
+        backgroundColor: Colors.transparent,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(25.0),
@@ -66,174 +66,122 @@ class BottomSheetView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        Material(
-          color: Colors.transparent,
-          child: PopScope(
-            canPop: isDismissible,
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(25.0),
-              ),
-              child: Container(
-                color:
-                    backgroundColor ?? Theme.of(context).colorScheme.onSurface,
-                child: Stack(
+    final hasMainButton =
+        mainButtonText != null && onMainActionFunction != null;
+    final hasSecondaryButton =
+        secondButtonText != null && onSecondaryActionFunction != null;
+
+    return Material(
+      color: Colors.transparent,
+      child: PopScope(
+        canPop: isDismissible,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+          child: Container(
+            width: double.infinity,
+            color: backgroundColor ?? AppColors.backgroundColor,
+            child: SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(
+                  AppValues.padding_24,
+                  AppValues.padding_10,
+                  AppValues.padding_24,
+                  AppValues.padding_20,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (isCloseIcon == true)
-                      PositionedDirectional(
-                        end: 15.sp,
-                        top: 20.sp,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: AppColors.borderColor,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (isCloseIcon)
+                      Align(
+                        alignment: AlignmentDirectional.topEnd,
                         child: InkWell(
                           onTap: () => Navigator.pop(context),
-                          child: Container(
-                              // padding: EdgeInsets.all(10.sp),
-                              alignment: AlignmentDirectional.topStart,
-                              child: const Icon(CupertinoIcons.clear,
-                                  color: Colors.black)),
+                          child: const Padding(
+                            padding: EdgeInsets.only(top: 8),
+                            child: Icon(CupertinoIcons.clear, size: 20),
+                          ),
                         ),
                       ),
-                    // Column(
-                    //   children: [
-                    //     Padding(
-                    //       padding: EdgeInsets.symmetric(vertical: 20.sp),
-                    //       child: const DividerWidget(),
-                    //     ),
-                    //     Column(
-                    //       children: [
-                    //         if (iconPath != null)
-                    //           Container(
-                    //             alignment: AlignmentDirectional.topCenter,
-                    //             child: AssetImageView(
-                    //               path: iconPath!,
-                    //             ),
-                    //           ),
-                    //         if (iconWidget != null) iconWidget!,
-                    //         Container(
-                    //           padding: EdgeInsets.only(
-                    //               right: 0.03.sw, left: 0.03.sw, bottom: 15.sp),
-                    //           child: Column(
-                    //             mainAxisAlignment:
-                    //                 MainAxisAlignment.spaceBetween,
-                    //             children: [
-                    //               Column(
-                    //                 children: [
-                    //                   if (title != null)
-                    //                     Padding(
-                    //                       padding: EdgeInsets.only(
-                    //                           right: 0.04.sw,
-                    //                           left: 0.04.sw,
-                    //                           top: 0.01.sh),
-                    //                       child: Text(
-                    //                         title!,
-                    //                         textAlign: TextAlign.center,
-                    //                         style: Theme.of(context)
-                    //                             .textTheme
-                    //                             .headlineLarge
-                    //                             ?.copyWith(
-                    //                               color: titleColor ??
-                    //                                   Theme.of(context)
-                    //                                       .colorScheme
-                    //                                       .onPrimary,
-                    //                               fontSize: 18.sp,
-                    //                             ),
-                    //                       ),
-                    //                     ),
-                    //                   if (content != null)
-                    //                     Padding(
-                    //                       padding: EdgeInsets.only(
-                    //                           right: 0.04.sw,
-                    //                           left: 0.04.sw,
-                    //                           top: 0.01.sh),
-                    //                       child: Text(content!,
-                    //                           textAlign: TextAlign.center,
-                    //                           style: Theme.of(context)
-                    //                               .textTheme
-                    //                               .bodyMedium
-                    //                               ?.copyWith(
-                    //                                 color: contentColor ??
-                    //                                     Theme.of(context)
-                    //                                         .colorScheme
-                    //                                         .onPrimary,
-                    //                                 fontSize: 16.sp,
-                    //                               )),
-                    //                     ),
-                    //                   if (contentWidget != null)
-                    //                     Padding(
-                    //                       padding: EdgeInsets.only(
-                    //                         right: 0.04.sw,
-                    //                         left: 0.04.sw,
-                    //                       ),
-                    //                       child: contentWidget,
-                    //                     ),
-                    //                   SizedBox(
-                    //                     height: 0.02.sh,
-                    //                   ),
-                    //                 ],
-                    //               ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     if (mainButtonText != null &&
-                    //         onMainActionFunction != null)
-                    //       ButtonView(
-                    //           width: nobuttonWidth == true
-                    //               ? null
-                    //               : MediaQuery.of(context)
-                    //                       .size
-                    //                       .width *
-                    //                   0.45,
-                    //           backgroundColor: mainButtonColor ??
-                    //               dialogType.getColor(context),
-                    //           textColor: mainButtonTextColor,
-                    //           title: mainButtonText!,
-                    //           onClickFunction:
-                    //               onMainActionFunction!),
-                    //     if (secondButtonText != null &&
-                    //         onSecondaryActionFunction != null)
-                    //       const Expanded(child: SizedBox()),
-                    //     if (secondButtonText != null &&
-                    //         onSecondaryActionFunction != null)
-                    //       ButtonView(
-                    //         borderColor: Colors.transparent,
-                    //         width: MediaQuery.of(context)
-                    //                 .size
-                    //                 .width *
-                    //             0.45,
-                    //         textColor: secondaryButtonTextColor ??
-                    //             dialogType.getColor(context),
-                    //         title: secondButtonText!,
-                    //         onClickFunction:
-                    //             onSecondaryActionFunction!,
-                    //         backgroundColor:
-                    //             secondaryButtonColor ??
-                    //                 dialogType
-                    //                     .getSecondColor(context),
-                    //       ),
-                    //   ],
-                    // )
+                    if (iconWidget != null) ...[
+                      const SizedBox(height: AppValues.padding_16),
+                      iconWidget!,
+                    ],
+                    if (title != null) ...[
+                      const SizedBox(height: AppValues.padding_16),
+                      Text(
+                        title!,
+                        textAlign: TextAlign.center,
+                        style: TextStyles.bold.copyWith(
+                            fontSize: 18,
+                            color: titleColor ?? AppColors.textColor),
+                      ),
+                    ],
+                    if (content != null) ...[
+                      const SizedBox(height: AppValues.padding_8),
+                      Text(
+                        content!,
+                        textAlign: TextAlign.center,
+                        style: TextStyles.bodySmall.copyWith(
+                            color: contentColor ?? AppColors.subTextColor),
+                      ),
+                    ],
+                    if (contentWidget != null) ...[
+                      const SizedBox(height: AppValues.padding_16),
+                      contentWidget!,
+                    ],
+                    if (hasMainButton || hasSecondaryButton) ...[
+                      const SizedBox(height: AppValues.padding_24),
+                      Row(
+                        children: [
+                          if (hasSecondaryButton)
+                            Expanded(
+                              child: AppButtonView(
+                                backgroundColor: secondaryButtonColor ??
+                                    AppColors.lightMainColor,
+                                textColor: secondaryButtonTextColor ??
+                                    AppColors.textColor,
+                                title: secondButtonText!,
+                                onClickFunction: onSecondaryActionFunction!,
+                              ),
+                            ),
+                          if (hasMainButton && hasSecondaryButton)
+                            const SizedBox(width: AppValues.padding_10),
+                          if (hasMainButton)
+                            Expanded(
+                              child: AppButtonView(
+                                backgroundColor: mainButtonColor ??
+                                    dialogType?.color ??
+                                    AppColors.mainColor,
+                                textColor: mainButtonTextColor ?? Colors.white,
+                                title: mainButtonText!,
+                                onClickFunction: onMainActionFunction!,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
-              //             SafeArea(
-              //               top: false,
-              //               child: SizedBox(
-              //                 height: 10.sp +
-              //                     MediaQuery.of(context).viewInsets.bottom,
-              //               ),
-              //             )
-              //           ],
-              //         ),
-              //       ],
-              //     ),
-              //   ],
-              // ),
-              // ),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }

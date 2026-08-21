@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
 import './get_currency_request_model.dart';
 
-class GetCurrencyRequest with Request, PostRequest {
+class GetCurrencyRequest with Request, GetRequest {
   const GetCurrencyRequest(this.requestModel);
   @override
   final GetCurrencyRequestModel requestModel;

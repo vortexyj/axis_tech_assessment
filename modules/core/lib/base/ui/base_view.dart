@@ -2,6 +2,7 @@ import 'package:core/base/bloc/base_bloc.dart';
 import 'package:core/packages/flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:ui_components/ui_components.dart';
 
 import '../../core.dart';
 
@@ -39,7 +40,7 @@ abstract class BaseView<T extends BaseCubit<S>, S extends BaseState>
         builder: (context, state) {
           return Scaffold(
             appBar: appBar(context),
-            backgroundColor: screenBackGround,
+            backgroundColor: screenBackGround ?? AppColors.backgroundColor,
             body: body(context),
           );
         },
