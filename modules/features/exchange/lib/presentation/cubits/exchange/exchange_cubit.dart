@@ -11,8 +11,9 @@ class ExchangeCubit extends BaseCubit<ExchangeState> {
 
   /// Every target currency except the base (EGP) — derived from the enum
   /// itself, so adding/removing a currency there doesn't need a change here.
-  static final List<CurrencyEnums> currencyOrder =
-      CurrencyEnums.values.where((c) => c != CurrencyEnums.EGP).toList();
+  static final List<CurrencyEnums> currencyOrder = CurrencyEnums.values
+      .where((c) => c != CurrencyEnums.EGP)
+      .toList();
 
   @override
   Future<void> initState() async {
@@ -71,8 +72,10 @@ class ExchangeCubit extends BaseCubit<ExchangeState> {
     }).toList();
 
     final isOffline =
-        state.todayCurrency!.isFromCache || state.yesterdayCurrency!.isFromCache;
-    final cachedAt = state.todayCurrency!.cachedAt ?? state.yesterdayCurrency!.cachedAt;
+        state.todayCurrency!.isFromCache ||
+        state.yesterdayCurrency!.isFromCache;
+    final cachedAt =
+        state.todayCurrency!.cachedAt ?? state.yesterdayCurrency!.cachedAt;
 
     emitIfNotClosed(
       state.copyWith(

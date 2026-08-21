@@ -6,23 +6,27 @@ import '../models/currency_details/response/currency_details_response.dart';
 
 abstract class CurrencyDetailsRemoteDataSource {
   Future<CurrencyDetailsResponse> currencyDetails(
-      CurrencyDetailsRequestModel currency_detailsData);
+    CurrencyDetailsRequestModel currencyDetailsdata,
+  );
   // [Adding_new_datasource_method_here_dont_remove_this_command_!!!]
 }
 
-class CurrencyDetailsRemoteDataSourceImpl implements CurrencyDetailsRemoteDataSource {
+class CurrencyDetailsRemoteDataSourceImpl
+    implements CurrencyDetailsRemoteDataSource {
   final Network network;
   CurrencyDetailsRemoteDataSourceImpl({required this.network});
 
   @override
   Future<CurrencyDetailsResponse> currencyDetails(
-      CurrencyDetailsRequestModel currency_detailsData) async {
-    final apiRequest = CurrencyDetailsRequest(currency_detailsData);
+    CurrencyDetailsRequestModel currencyDetailsdata,
+  ) async {
+    final apiRequest = CurrencyDetailsRequest(currencyDetailsdata);
     final result = await network.send(
       request: apiRequest,
       responseFromMap: (map) => CurrencyDetailsResponse.fromJson(map),
     );
     return result;
   }
+
   // [Adding_new_datasource_impl_method_here_dont_remove_this_command_!!!]
 }

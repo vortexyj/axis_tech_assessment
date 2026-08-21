@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:core/utils/values/app_values.dart';
 import 'package:flutter/material.dart';
 
-
 class Debouncer {
   final int milliseconds;
   VoidCallback? action;

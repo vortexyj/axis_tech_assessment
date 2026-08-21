@@ -13,3 +13,4 @@ export 'src/ui_components/app_bottom_sheet_view.dart';
 export 'src/ui_components/app_card.dart';
 export 'src/ui_components/rate_change_text.dart';
 export 'src/ui_components/offline_banner.dart';
+export 'src/ui_components/rate_history_chart.dart';

@@ -13,12 +13,17 @@ class ExchangeRemoteDataSourceImpl implements ExchangeRemoteDataSource {
   final Network network;
   ExchangeRemoteDataSourceImpl({required this.network});
 
-    @override
-    Future<GetCurrencyResponse> getCurrency( GetCurrencyRequestModel requestModel) async {
-        final apiRequest = GetCurrencyRequest(requestModel);
-        final result = await network.send( request: apiRequest,
-                responseFromMap: (map) => GetCurrencyResponse.fromJson(map));
-        return result;
-    }
+  @override
+  Future<GetCurrencyResponse> getCurrency(
+    GetCurrencyRequestModel requestModel,
+  ) async {
+    final apiRequest = GetCurrencyRequest(requestModel);
+    final result = await network.send(
+      request: apiRequest,
+      responseFromMap: (map) => GetCurrencyResponse.fromJson(map),
+    );
+    return result;
+  }
+
   // [Adding_new_datasource_impl_method_here_dont_remove_this_command_!!!]
 }

@@ -9,10 +9,14 @@ class CurrencyDetailsScreenRouter {
   static Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case CurrencyDetailsScreenView.id:
-      return CustomPageRouter.createRoute(page:CurrencyDetailsScreenView());
+        return CustomPageRouter.createRoute(
+          page: CurrencyDetailsScreenView(
+            currency: routeSettings.arguments as CurrencyEnums,
+          ),
+        );
       // [Adding_new_router_case_here_dont_remove_this_command_!!!]
       default:
-        return null; 
+        return null;
     }
   }
 }

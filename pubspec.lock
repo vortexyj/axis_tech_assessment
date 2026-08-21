@@ -112,6 +112,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
+  currency_details:
+    dependency: "direct main"
+    description:
+      path: "modules/features/currency_details"
+      relative: true
+    source: path
+    version: "0.0.1"
   dartz:
     dependency: transitive
     description:

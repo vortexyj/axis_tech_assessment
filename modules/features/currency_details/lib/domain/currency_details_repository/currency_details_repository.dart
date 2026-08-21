@@ -5,7 +5,8 @@ import '../../data/models/currency_details/request/currency_details_request_mode
 // [Adding_new_model_import_here_dont_remove_this_command_!!!]
 
 abstract class CurrencyDetailsRepository {
-  Future<Either<Failure, CurrencyDetailsEntity>> currencyDetails(
-      {required CurrencyDetailsRequestModel requestModel});
+  Future<Either<Failure, CurrencyDetailsEntity>> currencyDetails({
+    required CurrencyDetailsRequestModel requestModel,
+  });
   // [Adding_new_repo_method_here_dont_remove_this_command_!!!]
 }

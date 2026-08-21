@@ -9,8 +9,10 @@ class GetCurrencyUseCase
   final ExchangeRepository repository;
   GetCurrencyUseCase({required this.repository});
   @override
-  Future<Either<Failure, GetCurrencyEntity>> call(GetCurrencyRequestModel requestModel) async {
-       Either<Failure, GetCurrencyEntity> response = await repository.getCurrency(
+  Future<Either<Failure, GetCurrencyEntity>> call(
+    GetCurrencyRequestModel requestModel,
+  ) async {
+    Either<Failure, GetCurrencyEntity> response = await repository.getCurrency(
       requestModel: requestModel,
     );
     return response;

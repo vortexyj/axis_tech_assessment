@@ -9,10 +9,11 @@ class CurrencyDetailsUseCase
   final CurrencyDetailsRepository repository;
   CurrencyDetailsUseCase({required this.repository});
   @override
-  Future<Either<Failure, CurrencyDetailsEntity>> call(CurrencyDetailsRequestModel requestModel) async {
-       Either<Failure, CurrencyDetailsEntity> response = await repository.currencyDetails(
-      requestModel: requestModel,
-    );
+  Future<Either<Failure, CurrencyDetailsEntity>> call(
+    CurrencyDetailsRequestModel requestModel,
+  ) async {
+    Either<Failure, CurrencyDetailsEntity> response = await repository
+        .currencyDetails(requestModel: requestModel);
     return response;
   }
 }

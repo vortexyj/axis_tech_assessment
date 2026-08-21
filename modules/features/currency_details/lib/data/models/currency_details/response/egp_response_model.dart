@@ -20,12 +20,6 @@ class EgpResponseModel extends EgpEntity {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'usd': usd,
-      'eur': eur,
-      'gbp': gbp,
-      'sar': sar,
-      'jpy': jpy,
-    };
+    return {'usd': usd, 'eur': eur, 'gbp': gbp, 'sar': sar, 'jpy': jpy};
   }
 }

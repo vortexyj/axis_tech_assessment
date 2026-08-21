@@ -10,6 +10,14 @@ class CurrencyDetailsResponse extends ResponseModel<CurrencyDetailsEntity> {
     super.statusName,
   });
 
-  CurrencyDetailsResponse.fromJson(Map<String, dynamic> json)
-      : super.fromJson(json, (data) => CurrencyDetailsResponseModel.fromJson(data));
+  /// This third-party API has no `{result, statusCode, ...}` app envelope —
+  /// it returns the entity's fields directly at the top level. Reaching this
+  /// factory means Dio already got a 2xx (otherwise it would have thrown), so
+  /// the app's success status is synthesized rather than read from the body.
+  factory CurrencyDetailsResponse.fromJson(Map<String, dynamic> json) {
+    return CurrencyDetailsResponse(
+      result: CurrencyDetailsResponseModel.fromJson(json),
+      statusCode: AppValues.successCode,
+    );
+  }
 }
