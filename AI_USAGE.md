@@ -67,3 +67,58 @@ fabricate-then-report) and the resulting document.
 **Why:** A log whose entire purpose is to be audited against commit timestamps
 is worthless — or actively misleading — if it contains invented prompts. Accuracy
 here mattered more than a longer-looking log.
+
+---
+
+## 3. Debug `core.dart` unable to resolve `network`/`failures` modules
+
+**Date:** 2026-08-21, ~10:25 local (+03:00)
+**Session:** Claude Code
+**Files changed:** [modules/core/pubspec.yaml](modules/core/pubspec.yaml)
+
+**Prompt (verbatim):**
+> there in an error in @modules/core/lib/core.dart it appears it cant see the
+> modules failure and networking inspite me calling them in the yamal file
+
+**What the model returned:**
+Rather than guessing from the yaml alone, it ran `flutter pub get` directly in
+`modules/core` to see the real resolver error. That surfaced a version-solving
+conflict: the unused dev dependency `hive_generator ^2.0.1` caps `analyzer
+<7.0.0`, while `bloc_test ^9.1.7`'s `test` dependency chain needs `analyzer
+>=8.0.0` under this Flutter SDK's pinned `matcher`/`test_api`. Because `pub get`
+was failing outright, `network` and `failures` were never written into `core`'s
+resolved package config — that was the actual cause of the "can't see the
+modules" symptom, not the `path:` declarations themselves (those were correct).
+It confirmed `hive`/`hive_generator`/`build_runner` weren't referenced anywhere
+in the codebase (no `@HiveType`, no generated `.g.dart` files) before removing
+`hive_generator` and `build_runner` from `core`'s `dev_dependencies`, then
+re-ran `pub get` in `core`, `network`, `failures`, and the root app, and
+`dart analyze lib/core.dart`, to confirm the fix.
+
+**Decision:** Accepted as applied.
+**Why:** The diagnosis was backed by the actual pub resolver error, not
+speculation, and the removed packages were provably unused (grepped first), so
+the fix carried no functional risk. Noted `hive_ce_generator` (the maintained
+fork) as the path forward if Hive code-gen is needed later — did not proactively
+add it since nothing needs it yet.
+
+---
+
+## 4. Standing instruction: log every prompt going forward
+
+**Date:** 2026-08-21, ~10:28 local (+03:00)
+**Session:** Claude Code
+
+**Prompt (verbatim):**
+> mark everytask in the ai usage md dont forget in every task
+>
+> [clarification] every taks i give not everytask anywhere
+
+**What the model returned:**
+Confirmed the scope: every prompt the user gives in this project gets an entry
+in this file going forward — not a filtered subset picked by the model, and not
+background/automatic actions taken without a user prompt behind them.
+
+**Decision:** Accepted as a standing rule for the remainder of this project.
+**Why:** The user's instruction, stated directly. Applying it from here on, so
+this file stays a complete, honest record rather than a curated highlight reel.
