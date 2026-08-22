@@ -1,0 +1,50 @@
+name: core
+description: "A new Flutter package project."
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.12.2
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+    #packages
+  intl: ^0.20.2
+  dartz: ^0.10.1
+  flutter_bloc: ^8.1.2
+  flutter_screenutil: ^5.8.1
+  get_it: ^7.2.0
+  equatable: ^2.0.5
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.3
+  easy_localization: ^3.0.7
+  cached_network_image: ^3.3.1
+  fluttertoast: ^8.2.11
+  hive_flutter: ^1.1.0
+  fl_chart: ^0.69.0
+  shimmer: ^3.0.0
+
+  ### MODULES
+  failures:
+    path: ../failures
+  network:
+    path: ../network
+  local_storage:
+    path: ../local_storage
+  ui_components:
+    path: ../ui_components
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  bloc_test: ^9.1.7
+  mocktail: ^1.0.4
+  flutter_lints: ^6.0.0
+
+
+flutter:
+  uses-material-design: true
