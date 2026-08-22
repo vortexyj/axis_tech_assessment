@@ -817,3 +817,117 @@ the entry-15 correction.
 **Why:** The instruction was explicitly to mirror Module 1's entire treatment,
 not a single narrow step — so, unlike entry 14, building the full stack in
 one pass matched what was actually asked rather than overstepping it.
+
+---
+
+## 26. Audit: what's left in the assignment
+
+**Date:** 2026-08-21, ~22:15 local (+03:00)
+**Session:** Claude Code
+**Files changed:** None — discussion/audit only.
+
+**Prompt (verbatim):**
+> is there is something left to be done in the assignment task
+
+**What the model returned:**
+Cross-checked the current implementation against `docs/claude_design_prompt.md`
+(the only requirements source actually present in the repo — the original
+assessment PDF itself isn't saved here) rather than reciting from memory.
+Confirmed Module 1 and Module 2 both satisfy every explicit requirement, then
+actually ran `flutter test` to check the testing gap rather than assuming —
+found the root `test/widget_test.dart` still the untouched counter-app
+template, referencing files that don't exist, and failing to even compile.
+Reported: zero test coverage anywhere, default `README.md`, and that nothing
+had been runtime-verified in a simulator (deliberately, per entry 15).
+
+**Decision:** Accepted as an audit — no code changed.
+**Why:** Status question, not an implementation request.
+
+---
+
+## 27. Testing plan, explained (first time doing this)
+
+**Date:** 2026-08-21, ~22:33 local (+03:00)
+**Session:** Claude Code
+**Files changed:** None — planning/explanation only.
+
+**Prompt (verbatim):**
+> i did run the app and verify every thing is running good lets beign with the
+> testing tbh i didnt do this before so discribe for me what exactly are we
+> doing and how and how much time it will take us for all and for each task
+> module if needed in every module
+
+**What the model returned:**
+Checked each module's actual `pubspec.yaml` first — found `bloc_test`/
+`mocktail` already present as dev dependencies in `core` but *not* in
+`exchange`/`currency_details` (dev dependencies aren't inherited through a
+path dependency), which shaped the real first step of the plan. Explained the
+three kinds of Flutter tests, recommended skipping integration tests (given
+the user's own manual verification already covered that ground), and gave a
+module-by-module breakdown with time estimates: `core` (~15 min), `exchange`
+(~50–60 min), `currency_details` (~50–60 min), `ui_components` widget tests
+(~30–40 min), deleting the broken root test (~2 min) — total ~2.5–3 hours.
+
+**Decision:** Accepted — user replied "lets go" (entry 28).
+**Why:** Explicitly requested as an explanation before starting, since the
+user said they hadn't done this before.
+
+---
+
+## 28. Write the tests
+
+**Date:** 2026-08-21, ~02:43–02:48 local (+03:00) on 2026-08-22, spanning a
+mid-turn pause and resume
+**Session:** Claude Code
+**Files changed:** `modules/core/test/rate_direction_extension_test.dart` (new);
+`modules/features/exchange/pubspec.yaml` (`bloc_test`/`mocktail` added),
+`test/domain/entities/exchange_rate_item_test.dart`,
+`test/presentation/cubits/exchange_cubit_test.dart`,
+`test/data/exchange_repository_impl_test.dart` (all new);
+`exchange_cubit.dart` (bug fix — see below);
+`modules/features/currency_details/pubspec.yaml` (same two dev deps added),
+`test/presentation/cubits/currency_details_cubit_test.dart`,
+`test/data/currency_details_repository_impl_test.dart` (new);
+`currency_details_cubit.dart` (bug fix — see below);
+`modules/ui_components/test/test_harness.dart`,
+`test/app_card_test.dart`, `test/rate_change_text_test.dart`,
+`test/error_widget_view_test.dart`, `test/offline_banner_test.dart` (all
+new, first tests this module has ever had); deleted the stale
+`core/test/core_test.dart`, `exchange/test/exchange_test.dart`,
+`currency_details/test/currency_details_test.dart` TODO stubs and the root
+`test/widget_test.dart` (broken counter-app template).
+
+**Prompts (verbatim, across the pause):**
+> lets go
+>
+> [mid-turn] stop for a sec
+>
+> continue
+
+**What the model returned:**
+Worked through the plan from entry 27 module by module, running each test
+file as it was written rather than batching. This caught two real bugs the
+same way entries 14/15 predicted testing would: `ExchangeCubit._buildRates()`
+dereferenced `state.todayCurrency!`/`state.yesterdayCurrency!` unconditionally
+— when both fetches fail, those fields are never set, so the cubit crashed
+with a null-check error instead of leaving the already-emitted failure state
+alone. `CurrencyDetailsCubit.getCurrencyDetails()` had a related but
+non-crashing bug: it fetched all 5 remaining history days even after
+today/yesterday had already failed, wasting 5 API calls for no reason (a test
+asserting the call count caught this directly — expected 2 calls, got 7).
+Both fixed with a small early-return guard once discovered, then the
+originating test re-run to confirm the fix. Stopped completely when told to
+("stop for a sec") without finishing any in-flight file, and picked back up
+from exactly where it left off on "continue" — no work was redone or
+re-explained.
+
+**Decision:** Accepted, including the two bug fixes made along the way.
+**Why:** The plan itself was already agreed in entry 27; the two bug fixes
+were direct, small, test-surfaced corrections in the same spirit as entries
+14/15 (find something broken while doing the actual asked-for work, fix it,
+say so) rather than unrelated scope expansion.
+
+**Result:** 46 tests total, all passing — `core` 6, `exchange` 14,
+`currency_details` 11, `ui_components` 14, `lib` (root) 1 → 0 (removed, no
+longer applicable). `dart analyze` clean (only pre-existing, unrelated infos)
+across every module touched.
