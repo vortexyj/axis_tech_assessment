@@ -42,6 +42,9 @@ class CurrencyDetailsCubit extends BaseCubit<CurrencyDetailsState> {
     await getYesterdayRate(yesterday);
     _buildCurrentRate();
 
+    // Rate section already failed — no point fetching the other 5 days.
+    if (_fetchFailure != null) return;
+
     for (final day in days.take(days.length - 2)) {
       await _fetchDay(day, isToday: false);
     }

@@ -58,8 +58,16 @@ class ExchangeCubit extends BaseCubit<ExchangeState> {
   }
 
   void _buildRates() {
-    final today = state.todayCurrency!.egp;
-    final yesterday = state.yesterdayCurrency!.egp;
+    final todayCurrency = state.todayCurrency;
+    final yesterdayCurrency = state.yesterdayCurrency;
+    if (todayCurrency == null || yesterdayCurrency == null) {
+      // A fetch already failed and emitted PageState.failure — nothing to
+      // build from.
+      return;
+    }
+
+    final today = todayCurrency.egp;
+    final yesterday = yesterdayCurrency.egp;
 
     final rates = currencyOrder.map((currency) {
       final todayRate = today!.asMap[currency.responseKey]!;
@@ -71,11 +79,8 @@ class ExchangeCubit extends BaseCubit<ExchangeState> {
       );
     }).toList();
 
-    final isOffline =
-        state.todayCurrency!.isFromCache ||
-        state.yesterdayCurrency!.isFromCache;
-    final cachedAt =
-        state.todayCurrency!.cachedAt ?? state.yesterdayCurrency!.cachedAt;
+    final isOffline = todayCurrency.isFromCache || yesterdayCurrency.isFromCache;
+    final cachedAt = todayCurrency.cachedAt ?? yesterdayCurrency.cachedAt;
 
     emitIfNotClosed(
       state.copyWith(
