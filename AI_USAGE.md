@@ -931,3 +931,57 @@ say so) rather than unrelated scope expansion.
 `currency_details` 11, `ui_components` 14, `lib` (root) 1 → 0 (removed, no
 longer applicable). `dart analyze` clean (only pre-existing, unrelated infos)
 across every module touched.
+
+---
+
+## 29. Status check: what's left, post-testing
+
+**Date:** 2026-08-22, ~03:07 local (+03:00)
+**Session:** Claude Code
+**Files changed:** None — discussion/audit only.
+
+**Prompt (verbatim):**
+> whats left now
+
+**What the model returned:**
+Re-checked rather than repeated the entry-26 list from memory: ran `git
+status` and found the current branch (`feature/apply_unit_widget_testing`)
+only carries the testing work as uncommitted — everything from earlier
+sessions (design system, both screens, caching) was already committed
+elsewhere. Confirmed `README.md` was still the untouched `flutter create`
+default. Reported: README is the one real remaining gap, the testing work
+itself isn't committed yet, and `local_storage` has no tests (called out as
+a deliberately-skipped, low-priority item from entry 27's plan, not a new
+finding).
+
+**Decision:** Accepted as a status update — no code changed.
+**Why:** Direct status question; re-verified against actual repo state
+rather than restating the prior audit unchanged.
+
+---
+
+## 30. Write the README
+
+**Date:** 2026-08-22, ~03:09 local (+03:00)
+**Session:** Claude Code
+**Files changed:** [README.md](README.md).
+
+**Prompt (verbatim):**
+> create the read me then with ur vision to describe the applicaiton
+> structure and main functionalities
+
+**What the model returned:**
+Re-checked the actual module tree, entry point (`lib/main_production.dart`),
+and `AppFlavor` before writing, rather than describing the architecture from
+memory across a long session. Wrote a README covering: what the app does
+(both screens, states, offline behavior) in plain terms; why the
+cache-fallback logic lives in the repository layer and not the cubit (the
+architectural reasoning from entries 19-20, written out for a reader who
+wasn't in this conversation); the module dependency map and the
+data/domain/presentation layering repeated inside each feature module; the
+tech stack; run/test commands; and a closing pointer to `AI_USAGE.md` for
+the full AI-usage record.
+
+**Decision:** Accepted.
+**Why:** Directly requested deliverable — "your vision" was an explicit ask
+for a genuine architectural description, not a templated stub.
